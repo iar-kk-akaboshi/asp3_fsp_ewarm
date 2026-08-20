@@ -8,7 +8,7 @@ sampleの説明
 
 EK-RA6M5のデバッグUSBポートとPCを接続し、USBシリアルと、RX(J23-pin0)、TX(J24-pin1)、GND(J18-pin7)を接続して、TeraTermなどでシリアル接続します。ボーレートは115200bpsです。
 
-実際の接続の接続した例がこちらです。![EK-RA6M5とUSEシリアル変換の接続](images\EK-RA6M5とUSBシリアル変換接続例.png)
+実際の接続の接続した例がこちらです。![EK-RA6M5とUSEシリアル変換の接続](images/EK-RA6M5とUSBシリアル変換接続例.png)
 
 ## 対応コンパイラ
 IAR Embedded Workbench for ARM（EWARM)を使用。
