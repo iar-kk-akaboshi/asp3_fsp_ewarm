@@ -86,77 +86,54 @@ extern bsp_init_info_t const g_init_info;
  **********************************************************************************************************************/
 /* DDSC symbol definitions */
 /* Zero initialization tables */
-extern uint32_t __ospi0_cs0_zero_nocache$$Base;
-extern uint32_t __ospi0_cs0_zero_nocache$$Limit;
-extern uint32_t __ospi0_cs0_zero$$Base;
-extern uint32_t __ospi0_cs0_zero$$Limit;
-extern uint32_t __ram_zero_nocache$$Base;
-extern uint32_t __ram_zero_nocache$$Limit;
-extern uint32_t __ram_zero$$Base;
-extern uint32_t __ram_zero$$Limit;
-extern uint32_t __ram_tbss$$Base;
-extern uint32_t __ram_tbss$$Limit;
+#pragma section="__ospi0_cs0_zero_nocache"
+#pragma section="__ospi0_cs0_zero"
+#pragma section="__ram_zero_nocache"
+#pragma section="__ram_zero"
 static const bsp_init_zero_info_t zero_list[] =
 {
-  {.p_base = &__ospi0_cs0_zero_nocache$$Base, .p_limit = &__ospi0_cs0_zero_nocache$$Limit,.type={.copy_64 = 0, .external = 1, .source_type = INIT_MEM_ZERO, .destination_type = INIT_MEM_OSPI0_CS0}},
-  {.p_base = &__ospi0_cs0_zero$$Base, .p_limit = &__ospi0_cs0_zero$$Limit,.type={.copy_64 = 0, .external = 1, .source_type = INIT_MEM_ZERO, .destination_type = INIT_MEM_OSPI0_CS0}},
-  {.p_base = &__ram_zero_nocache$$Base, .p_limit = &__ram_zero_nocache$$Limit,.type={.copy_64 = 0, .external = 0, .source_type = INIT_MEM_ZERO, .destination_type = INIT_MEM_RAM}},
-  {.p_base = &__ram_zero$$Base, .p_limit = &__ram_zero$$Limit,.type={.copy_64 = 0, .external = 0, .source_type = INIT_MEM_ZERO, .destination_type = INIT_MEM_RAM}},
-  {.p_base = &__ram_tbss$$Base, .p_limit = &__ram_tbss$$Limit,.type={.copy_64 = 0, .external = 0, .source_type = INIT_MEM_ZERO, .destination_type = INIT_MEM_RAM}}
+  {.p_base = (uint32_t *) __section_begin("__ospi0_cs0_zero_nocache"), .p_limit = (uint32_t *) __section_end("__ospi0_cs0_zero_nocache"),.type={.copy_64 = 0, .external = 1, .source_type = INIT_MEM_ZERO, .destination_type = INIT_MEM_OSPI0_CS0}},
+  {.p_base = (uint32_t *) __section_begin("__ospi0_cs0_zero"), .p_limit = (uint32_t *) __section_end("__ospi0_cs0_zero"),.type={.copy_64 = 0, .external = 1, .source_type = INIT_MEM_ZERO, .destination_type = INIT_MEM_OSPI0_CS0}},
+  {.p_base = (uint32_t *) __section_begin("__ram_zero_nocache"), .p_limit = (uint32_t *) __section_end("__ram_zero_nocache"),.type={.copy_64 = 0, .external = 0, .source_type = INIT_MEM_ZERO, .destination_type = INIT_MEM_RAM}},
+  {.p_base = (uint32_t *) __section_begin("__ram_zero"), .p_limit = (uint32_t *) __section_end("__ram_zero"),.type={.copy_64 = 0, .external = 0, .source_type = INIT_MEM_ZERO, .destination_type = INIT_MEM_RAM}}
 };
 /* Load initialization tables */
-extern uint32_t __ospi0_cs0_from_qspi_flash$$Base;
-extern uint32_t __ospi0_cs0_from_qspi_flash$$Limit;
-extern uint32_t __ospi0_cs0_from_qspi_flash$$Load;
-extern uint32_t __ospi0_cs0_from_ospi0_cs1$$Base;
-extern uint32_t __ospi0_cs0_from_ospi0_cs1$$Limit;
-extern uint32_t __ospi0_cs0_from_ospi0_cs1$$Load;
-extern uint32_t __ospi0_cs0_from_data_flash$$Base;
-extern uint32_t __ospi0_cs0_from_data_flash$$Limit;
-extern uint32_t __ospi0_cs0_from_data_flash$$Load;
-extern uint32_t __ospi0_cs0_from_flash$$Base;
-extern uint32_t __ospi0_cs0_from_flash$$Limit;
-extern uint32_t __ospi0_cs0_from_flash$$Load;
-extern uint32_t __ram_from_qspi_flash$$Base;
-extern uint32_t __ram_from_qspi_flash$$Limit;
-extern uint32_t __ram_from_qspi_flash$$Load;
-extern uint32_t __ram_from_ospi0_cs1$$Base;
-extern uint32_t __ram_from_ospi0_cs1$$Limit;
-extern uint32_t __ram_from_ospi0_cs1$$Load;
-extern uint32_t __ram_from_data_flash$$Base;
-extern uint32_t __ram_from_data_flash$$Limit;
-extern uint32_t __ram_from_data_flash$$Load;
-extern uint32_t __ram_from_flash$$Base;
-extern uint32_t __ram_from_flash$$Limit;
-extern uint32_t __ram_from_flash$$Load;
-extern uint32_t __ram_tdata$$Base;
-extern uint32_t __ram_tdata$$Limit;
-extern uint32_t __ram_tdata$$Load;
+#pragma section="__ospi0_cs0_from_qspi_flash"
+#pragma section="__qspi_flash_init_ospi0_cs0_from_qspi_flash"
+#pragma section="__ospi0_cs0_from_ospi0_cs1"
+#pragma section="__ospi0_cs1_init_ospi0_cs0_from_ospi0_cs1"
+#pragma section="__ospi0_cs0_from_data_flash"
+#pragma section="__data_flash_init_ospi0_cs0_from_data_flash"
+#pragma section="__ospi0_cs0_from_flash"
+#pragma section="__flash_init_ospi0_cs0_from_flash"
+#pragma section="__ram_from_qspi_flash"
+#pragma section="__qspi_flash_init_ram_from_qspi_flash"
+#pragma section="__ram_from_ospi0_cs1"
+#pragma section="__ospi0_cs1_init_ram_from_ospi0_cs1"
+#pragma section="__ram_from_data_flash"
+#pragma section="__data_flash_init_ram_from_data_flash"
+#pragma section="__ram_from_flash"
+#pragma section="__flash_init_ram_from_flash"
 static const bsp_init_copy_info_t copy_list[] =
 {
-  {.p_base = &__ospi0_cs0_from_qspi_flash$$Base, .p_limit = &__ospi0_cs0_from_qspi_flash$$Limit, .p_load = &__ospi0_cs0_from_qspi_flash$$Load,.type={.copy_64 = 0, .external = 1, .source_type = INIT_MEM_QSPI_FLASH, .destination_type = INIT_MEM_OSPI0_CS0}},
-  {.p_base = &__ospi0_cs0_from_ospi0_cs1$$Base, .p_limit = &__ospi0_cs0_from_ospi0_cs1$$Limit, .p_load = &__ospi0_cs0_from_ospi0_cs1$$Load,.type={.copy_64 = 0, .external = 1, .source_type = INIT_MEM_OSPI0_CS1, .destination_type = INIT_MEM_OSPI0_CS0}},
-  {.p_base = &__ospi0_cs0_from_data_flash$$Base, .p_limit = &__ospi0_cs0_from_data_flash$$Limit, .p_load = &__ospi0_cs0_from_data_flash$$Load,.type={.copy_64 = 0, .external = 1, .source_type = INIT_MEM_DATA_FLASH, .destination_type = INIT_MEM_OSPI0_CS0}},
-  {.p_base = &__ospi0_cs0_from_flash$$Base, .p_limit = &__ospi0_cs0_from_flash$$Limit, .p_load = &__ospi0_cs0_from_flash$$Load,.type={.copy_64 = 0, .external = 1, .source_type = INIT_MEM_FLASH, .destination_type = INIT_MEM_OSPI0_CS0}},
-  {.p_base = &__ram_from_qspi_flash$$Base, .p_limit = &__ram_from_qspi_flash$$Limit, .p_load = &__ram_from_qspi_flash$$Load,.type={.copy_64 = 0, .external = 1, .source_type = INIT_MEM_QSPI_FLASH, .destination_type = INIT_MEM_RAM}},
-  {.p_base = &__ram_from_ospi0_cs1$$Base, .p_limit = &__ram_from_ospi0_cs1$$Limit, .p_load = &__ram_from_ospi0_cs1$$Load,.type={.copy_64 = 0, .external = 1, .source_type = INIT_MEM_OSPI0_CS1, .destination_type = INIT_MEM_RAM}},
-  {.p_base = &__ram_from_data_flash$$Base, .p_limit = &__ram_from_data_flash$$Limit, .p_load = &__ram_from_data_flash$$Load,.type={.copy_64 = 0, .external = 0, .source_type = INIT_MEM_DATA_FLASH, .destination_type = INIT_MEM_RAM}},
-  {.p_base = &__ram_from_flash$$Base, .p_limit = &__ram_from_flash$$Limit, .p_load = &__ram_from_flash$$Load,.type={.copy_64 = 0, .external = 0, .source_type = INIT_MEM_FLASH, .destination_type = INIT_MEM_RAM}},
-  {.p_base = &__ram_tdata$$Base, .p_limit = &__ram_tdata$$Limit, .p_load = &__ram_tdata$$Load,.type={.copy_64 = 0, .external = 0, .source_type = INIT_MEM_FLASH, .destination_type = INIT_MEM_RAM}}
+  {.p_base = (uint32_t *) __section_begin("__ospi0_cs0_from_qspi_flash"), .p_limit = (uint32_t *) __section_end("__ospi0_cs0_from_qspi_flash"), .p_load = (uint32_t *) __section_begin("__qspi_flash_init_ospi0_cs0_from_qspi_flash"),.type={.copy_64 = 0, .external = 1, .source_type = INIT_MEM_QSPI_FLASH, .destination_type = INIT_MEM_OSPI0_CS0}},
+  {.p_base = (uint32_t *) __section_begin("__ospi0_cs0_from_ospi0_cs1"), .p_limit = (uint32_t *) __section_end("__ospi0_cs0_from_ospi0_cs1"), .p_load = (uint32_t *) __section_begin("__ospi0_cs1_init_ospi0_cs0_from_ospi0_cs1"),.type={.copy_64 = 0, .external = 1, .source_type = INIT_MEM_OSPI0_CS1, .destination_type = INIT_MEM_OSPI0_CS0}},
+  {.p_base = (uint32_t *) __section_begin("__ospi0_cs0_from_data_flash"), .p_limit = (uint32_t *) __section_end("__ospi0_cs0_from_data_flash"), .p_load = (uint32_t *) __section_begin("__data_flash_init_ospi0_cs0_from_data_flash"),.type={.copy_64 = 0, .external = 1, .source_type = INIT_MEM_DATA_FLASH, .destination_type = INIT_MEM_OSPI0_CS0}},
+  {.p_base = (uint32_t *) __section_begin("__ospi0_cs0_from_flash"), .p_limit = (uint32_t *) __section_end("__ospi0_cs0_from_flash"), .p_load = (uint32_t *) __section_begin("__flash_init_ospi0_cs0_from_flash"),.type={.copy_64 = 0, .external = 1, .source_type = INIT_MEM_FLASH, .destination_type = INIT_MEM_OSPI0_CS0}},
+  {.p_base = (uint32_t *) __section_begin("__ram_from_qspi_flash"), .p_limit = (uint32_t *) __section_end("__ram_from_qspi_flash"), .p_load = (uint32_t *) __section_begin("__qspi_flash_init_ram_from_qspi_flash"),.type={.copy_64 = 0, .external = 1, .source_type = INIT_MEM_QSPI_FLASH, .destination_type = INIT_MEM_RAM}},
+  {.p_base = (uint32_t *) __section_begin("__ram_from_ospi0_cs1"), .p_limit = (uint32_t *) __section_end("__ram_from_ospi0_cs1"), .p_load = (uint32_t *) __section_begin("__ospi0_cs1_init_ram_from_ospi0_cs1"),.type={.copy_64 = 0, .external = 1, .source_type = INIT_MEM_OSPI0_CS1, .destination_type = INIT_MEM_RAM}},
+  {.p_base = (uint32_t *) __section_begin("__ram_from_data_flash"), .p_limit = (uint32_t *) __section_end("__ram_from_data_flash"), .p_load = (uint32_t *) __section_begin("__data_flash_init_ram_from_data_flash"),.type={.copy_64 = 0, .external = 0, .source_type = INIT_MEM_DATA_FLASH, .destination_type = INIT_MEM_RAM}},
+  {.p_base = (uint32_t *) __section_begin("__ram_from_flash"), .p_limit = (uint32_t *) __section_end("__ram_from_flash"), .p_load = (uint32_t *) __section_begin("__flash_init_ram_from_flash"),.type={.copy_64 = 0, .external = 0, .source_type = INIT_MEM_FLASH, .destination_type = INIT_MEM_RAM}}
 };
 /* nocache regions */
-extern uint32_t __ospi0_cs0_noinit_nocache$$Base;
-extern uint32_t __ospi0_cs0_noinit_nocache$$Limit;
-extern uint32_t __ospi0_cs0_zero_nocache$$Base;
-extern uint32_t __ospi0_cs0_zero_nocache$$Limit;
-extern uint32_t __ram_noinit_nocache$$Base;
-extern uint32_t __ram_noinit_nocache$$Limit;
-extern uint32_t __ram_zero_nocache$$Base;
-extern uint32_t __ram_zero_nocache$$Limit;
+#pragma section="__ospi0_cs0_noinit_nocache"
+#pragma section="__ospi0_cs0_zero_nocache"
+#pragma section="__ram_noinit_nocache"
+#pragma section="__ram_zero_nocache"
 static const bsp_mpu_nocache_info_t nocache_list[] =
 {
-  {.p_base = &__ospi0_cs0_noinit_nocache$$Base, .p_limit = &__ospi0_cs0_zero_nocache$$Limit},
-  {.p_base = &__ram_noinit_nocache$$Base, .p_limit = &__ram_zero_nocache$$Limit},
+  {.p_base = (uint32_t *) __section_begin("__ospi0_cs0_noinit_nocache"), .p_limit = (uint32_t *) __section_end("__ospi0_cs0_zero_nocache")},
+  {.p_base = (uint32_t *) __section_begin("__ram_noinit_nocache"), .p_limit = (uint32_t *) __section_end("__ram_zero_nocache")},
 };
 
 /* initialization data structure */

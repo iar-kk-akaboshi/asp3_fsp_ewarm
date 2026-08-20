@@ -1,57 +1,73 @@
-# TOPPERS/ASP3の VS code向けのRenesas拡張機能対応
+# TOPPERS/ASP3の EWARM向けのRenesas拡張機能対応
+sampleの説明
 
 ## ターゲット
 - [EK-RA6M5](https://www.renesas.com/ja/design-resources/boards-kits/ek-ra6m5?srsltid=AfmBOooxOIRvtPF3k4PRvCM5RuOCfogtJXSP6W-tii1L4Szs8DY4t46m)
 
+- UART-USB変換器が必要です。私はFT231X USBシリアル変換モジュール（https://akizukidenshi.com/catalog/g/g106894/ ） を使用しました。
+
+EK-RA6M5のデバッグUSBポートとPCを接続し、USBシリアルと、RX(J23-pin0)、TX(J24-pin1)、GND(J18-pin7)を接続して、TeraTermなどでシリアル接続します。ボーレートは115200bpsです。
+
+実際の接続の接続した例がこちらです。![EK-RA6M5とUSEシリアル変換の接続](images\EK-RA6M5とUSBシリアル変換接続例.png)
+
+## 対応コンパイラ
+IAR Embedded Workbench for ARM（EWARM)を使用。
+今回使用したバージョンは9.70.4になります。
+
+| ツール | コマンド名 | 
+|---|---|
+|Cコンパイラ | iccarm.exe |
+|アセンブラ |  iasmarm.exe |
+|リンカ     |  ilinkarm.exe |
+|SREC生成  |  ielftool.exe |
+
+## 関連ツール
+| ツール | コマンド名 | 
+|---|---|
+|CMake |  インストールしてPATHに設定してください。|
+|PYTHON     |インストールしてPATHに設定してください。 |
+|Ninja  |  EWARMにインストールしたものが利用できます。EWARMインストールフォルダの\common\binにあるので、ここもPATH設定してください。 |
+|TeraTerm     |UARTの送受信に使用します |
+
+
+
 ## コードのダウンロード
 
-![Gitクローン](images/Gitクローン.png)
+![Gitクローン]
 
-適当な場所に作業フォルダを作成し、そこをVSCodeで開きます。「Ctrl + Shift + @」でターミナルを開き、下記のコマンドを実行してコードをダウンロードします。
+適当な場所に作業フォルダを作成し、クローンしてください。
 
-```powershell
-git clone https://github.com/exshonda/asp3_fsp.git .
+```commandshell
+git clone --recursive  https://github.com/iar-kk-akaboshi/asp3_fsp_ewarm.git
 ```
 
-## ワークスペースを開く
+## \ek_ra6m5\sampleの説明
+このプロジェクトは、FSPのコード生成、EWARM設定などが終わっている状態です。
+そのため簡単にプログラムを動かすことが出来るようになっています。
+FSPの設定、EWARM設定が知りたい方は\ek_ra6m5\sample1を確認ください。
 
-![ワークスペースを開く](images/ワークスペースを開く.png)
-
-左領域にあるエクスプローラビューで`ek_ra6m5/sample/asp3_fsp.code-workspace`を選択し、「ワークスペースを開く」ボタンをクリックすると、ワークスペースが開かれCMakeの構成が行われます。
-
-![ツールチェンの選択](images/ツールチェンの選択.png)
-
-構成が終わるとツールチェンの選択項目が表示されるので、「Renesas Platform: ARM LLVM Toolchain - 18.1.3」を選択します。（このプロジェクト作成時のツールチェンです。）
-
-## Smart Configuratorでコードを再生成する
-
-エクスプローラビューで`configuration.xml`を右クリックし、「Open with RA Smart Configurator」を選択します。
-
-Smart Configuratorが開いたら「Generate Project Content」ボタンをクリックしてコードを生成します。
 
 ## プロジェクトのビルド
+### cfgに対応したライブラリを作成します。
 
-![すべてのプロジェクトのビルド](images/すべてのプロジェクトのビルド.png)
-
-メニューから「ターミナル」->「タスクの実行」->「Build Project」を選択します。
-
-下記のエラーが出た場合、「ターミナル」->「タスクの実行」->「Configure Project」を選択し、再びビルドします。
-
+フォルダ\ek_ra6m5\sampleに移動してコマンドラインで以下を実行します。これにより\sample\build\Debug\asp3 にlibasp3.aとlibasp3syssvc.aのライブラリが作成されます。
 ```text
-Components have been added to, or removed from the project. Build may fail until the project is refreshed in your IDE.
+cmake --preset Debug
+cmake --build build\Debug
 ```
 
-![ビルド成功](images/ビルド成功.png)
+### EWARMによるユーザコードのビルド
+EWARMを起動し、ワークスペースを読み込みます。
+EWARMのメニュー[ファイル]-[ワークスペースを開く]で、\ek_ra6m5\sampleの下にあるsample1.ewwを選択し、[開く]をクリックします。
+![EWARMでプロジェクトを開く](images\EWARMでプロジェクトを開く.png)
 
-## EK-RA6M5に接続してデバッグ
+EWARMの[メイク]をクリックします。エラーがゼロであれば、[ダウンロードしてデバッグ]をクリックすることで、プログラムの書き込みを実施します。
 
-EK-RA6M5のデバッグUSBポートとPCを接続し、USBシリアルと、RX(pin0)、TX(pin1)、GND(pin14)を接続して、TeraTermなどでシリアル接続します。ボーレートは115200bpsです。
 
-![デバッグ開始](images/デバッグ開始.png)
+ダウンロードが終了するとEWARMはデバッグモードになります。EWARMの[実行]をクリックすることで、プログラムが動作を開始します。
+![EWARMで実行](images\EWARM実行を開始.png)
 
-左領域にある「実行とデバッグ」アイコンを選択し、「デバッグの開始」ボタンをクリックします。
-`main`で停止しますので、「実行」ボタンで実行します。
-
-![サンプル１動作](images/サンプル１動作.png)
 
 シリアルポートからTOPPERSのバナーが表示され、サンプル１の動作が始まります。
+![サンプル動作](images/sample動作.png )
+

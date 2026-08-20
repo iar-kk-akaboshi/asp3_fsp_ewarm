@@ -45,24 +45,25 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS "TRUE")
 
 include(${CMAKE_CURRENT_LIST_DIR}/Config.cmake)
 
-include(${CMAKE_CURRENT_LIST_DIR}/cmake/GeneratedCfg.cmake)
 
-# Override optimization level: -Os -> -O2 (if present)
-string(REPLACE "-Os" "-O2" RASC_CMAKE_C_FLAGS   "${RASC_CMAKE_C_FLAGS}")
-string(REPLACE "-Os" "-O2" RASC_CMAKE_CXX_FLAGS "${RASC_CMAKE_CXX_FLAGS}")
+# RASC(LLVMARM) が生成する GCC/Clang 向け -f* オプションは、
+# IAR iccarm では「-f <command file>」解釈されてビルド失敗する。
+# 生成ファイルは再生成で上書きされるため、ここで後処理して除去する。
+if(CMAKE_C_COMPILER_ID STREQUAL "IAR")
+    set(RASC_CMAKE_ASM_FLAGS "")
+    set(RASC_CMAKE_C_FLAGS "")
+    set(RASC_CMAKE_CXX_FLAGS "")
+    set(RASC_CMAKE_EXE_LINKER_FLAGS "")
+    set(RASC_DEBUG_FLAGS "")
+    set(RASC_RELEASE_FLAGS "")
+    set(RASC_MIN_SIZE_RELEASE_FLAGS "")
+    set(RASC_RELEASE_WITH_DEBUG_INFO "")
+    set(CMAKE_C_FLAGS_DEBUG "")
+    set(CMAKE_CXX_FLAGS_DEBUG "")
+    set(CMAKE_ASM_FLAGS_DEBUG "")
+endif()
 
-# ATfE 21.x の clang は既定で picolibc の crt0.o を引き込み、その _start が
-# __data_size/__bss_start などを参照するが、ASP3+FSP のリンカスクリプトは
-# これらを定義していない（エントリは Reset_Handler）。crt0 等のスタートアップ
-# ファイルをリンクから除外する。
-list(APPEND RASC_CMAKE_EXE_LINKER_FLAGS "-nostartfiles")
 
-# RASC が生成する script/fsp.lld (fsp_gen.lld) は ASP3 固有セクション
-# (.vector, .empty.*) を認識しないため、ld.lld のデフォルト orphan placement
-# で最後の memory region に配置されてリンクエラーになる。
-# 追加リンカスクリプトを -T で渡し、FLASH 内に明示配置する。
-list(APPEND RASC_CMAKE_EXE_LINKER_FLAGS
-    "-T" "${CMAKE_CURRENT_LIST_DIR}/cmake/asp3_sections.lld")
 
 # RASCで生成されるra/・ra_gen/が無いとGeneratedSrc.cmakeのGLOBが空になり
 # 1回目のビルドでソース不足によるリンクエラーが発生するため、
@@ -85,60 +86,20 @@ if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ra" OR NOT EXISTS "${CMAKE_CURRENT_SO
     file(TOUCH ${CMAKE_CURRENT_BINARY_DIR}/configuration.xml.stamp)
 endif()
 
-include(${CMAKE_CURRENT_LIST_DIR}/cmake/GeneratedSrc.cmake)
 
 # ===== TOPPERS/ASP3 Core 取り込み（submodule＋ライブラリ専用モード） =====
 # 旧 bundled asp3/(fork) を廃止し、純カーネル asp3_core を submodule 参照する構成。
 # 経緯：asp3/asp3_core/docs/dev/fsp-integration.md
 
-# RASC コンテンツ生成ターゲット名の参照用にメインプロジェクト名を渡す
-set(ASP3_MAIN_PROJECT_NAME ${CMAKE_PROJECT_NAME})
-
 # TOPPERS/ASP3 のターゲット依存部を指定
 set(ASP3_TARGET ek_ra6m5)
 
-# FSP 協調ヘルパ（ASP3_TARGET_DIR / ASP3_CORE_DIR / ASP3_ROOT_DIR を解決）
-include(${CMAKE_CURRENT_LIST_DIR}/../../asp3/asp3_fsp.cmake)
-
-# アプリ（タスク定義＝sample1.c/.cfg）は asp3_core 同梱の sample を使用
-set(ASP3_APPLDIR  ${ASP3_CORE_DIR}/sample)
-set(ASP3_APPLNAME sample1)
-
-# asp3 カーネルライブラリ（libasp3.a）をライブラリ専用モードでビルド
-# （asp 実行ファイル・サンプル・ctest は作らず、asp3 lib／cfg生成／
-#   ヘルパ関数（asp3_add_syssvc 等）のみ公開）
-set(ASP3_LIBRARY_ONLY ON CACHE BOOL "build asp3 as library only" FORCE)
-add_subdirectory(${ASP3_CORE_DIR} asp3)
-
-# 最終実行ファイルに asp3・タスク本体・システムサービスを追加
-target_link_libraries(${CMAKE_PROJECT_NAME}.elf asp3)
-target_sources(${CMAKE_PROJECT_NAME}.elf PRIVATE
-    ${ASP3_CORE_DIR}/sample/sample1.c
-)
-# 旧 library.cmake＋syssvc.cmake に相当する asp3_core のヘルパ
-asp3_add_syssvc(${CMAKE_PROJECT_NAME}.elf)
-target_include_directories(${CMAKE_PROJECT_NAME}.elf PRIVATE
-    ${ASP3_CORE_DIR}/sample
-)
-
-# cfg1_out（FSP生成ヘッダ ra/・ra_gen/ を要する使い捨てELF）を RASC 生成に依存させる。
-# cfg1_out ターゲットは add_subdirectory(asp3_core) で生成されるため、ここで記述する
-# （target.cmake 内では未生成。PORTING_GUIDE「別ツールチェーンの併用」参照）。
-if(TARGET generate_content_${ASP3_MAIN_PROJECT_NAME})
-    add_dependencies(cfg1_out generate_content_${ASP3_MAIN_PROJECT_NAME})
-endif()
+# asp3_core 直接呼び出しの代わりに、asp3/CMakeLists.txt ラッパーを利用する。
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../../asp3 asp3)
 
 # TOPPERS/ASP3 を使うための FSP の設定（現状なし）
-asp3_set_fsp_options(${CMAKE_PROJECT_NAME}.elf)
+# asp3_set_fsp_options(${CMAKE_PROJECT_NAME}.elf)
 
 # TOPPERS/ASP3 のチェックを行う（シンボルがGCされるとエラーになるので省略）
-#asp3_cfg_check(${CMAKE_PROJECT_NAME}.elf)
+# asp3_cfg_check(${CMAKE_PROJECT_NAME}.elf)
 
-# Execute post-build to print size, generate hex and bin
-get_filename_component(_TOOLCHAIN_BIN "${CMAKE_C_COMPILER}" DIRECTORY)
-find_program(LLVM_SIZE NAMES llvm-size HINTS "${_TOOLCHAIN_BIN}" NO_DEFAULT_PATH)
-add_custom_command(TARGET ${CMAKE_PROJECT_NAME}.elf POST_BUILD
-	COMMAND ${LLVM_SIZE} $<TARGET_FILE:${CMAKE_PROJECT_NAME}.elf>
-	COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:${CMAKE_PROJECT_NAME}.elf> ${CMAKE_PROJECT_NAME}.hex
-	COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${CMAKE_PROJECT_NAME}.elf> ${CMAKE_PROJECT_NAME}.bin
-)

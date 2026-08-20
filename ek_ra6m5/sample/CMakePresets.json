@@ -1,0 +1,50 @@
+{
+    "version": 7,
+    "configurePresets": [
+        {
+            "name": "default",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "toolchainFile": "${sourceDir}/cmake/iar-iccarm.cmake",
+            "cacheVariables": {},
+            "environment": {
+                "ARMGCC_DIR": "/home/honda/.mcuxpressotools/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi",
+                "SdkRootDirPath": "/home/honda/MCUXSDK/mcuxsdk",
+                "POSTPROCESS_UTILITY": "/home/honda/.mcuxpressotools/mcux-fixelf-14.2.2/mcux-fixelf",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "MCUX_VENV_PATH": "/home/honda/.mcuxpressotools/.mcux-venv-3.12/bin",
+                "PATH": "$env{MCUX_VENV_PATH}${pathListSep}$penv{PATH}"
+            }
+        },
+        {
+            "name": "Debug",
+            "inherits": "default",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "Release",
+            "inherits": "default",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "Debug",
+            "configurePreset": "Debug"
+        },
+        {
+            "name": "Release",
+            "configurePreset": "Release"
+        }
+    ],
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 27,
+        "patch": 0
+    }
+}

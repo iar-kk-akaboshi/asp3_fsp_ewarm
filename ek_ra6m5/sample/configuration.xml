@@ -11,7 +11,7 @@
     <option key="#pinconfiguration#" value="R7FA6M5BH3CFC.pincfg"/>
     <option key="#FSPVersion#" value="6.2.0"/>
     <option key="#ConfigurationFragments#" value="Renesas##BSP##Board##ra6m5_ek##"/>
-    <option key="#SELECTED_TOOLCHAIN#" value="com.renesas.cdt.managedbuild.llvm.arm."/>
+    <option key="#SELECTED_TOOLCHAIN#" value="iar.arm.toolchain"/>
   </generalSettings>
   <raBspConfiguration>
     <config id="config.bsp.ra6m5.R7FA6M5BH3CFC">
@@ -204,6 +204,18 @@
       <description>Common source for all template projects.</description>
       <originalPack>Renesas.RA_common.6.2.0.pack</originalPack>
     </component>
+    <component apiversion="" class="Common" condition="" group="all" subgroup="fsp_common" variant="" vendor="Renesas" version="6.2.0">
+      <description>Board Support Package Common Files</description>
+      <originalPack>Renesas.RA.6.2.0.pack</originalPack>
+    </component>
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_ioport" variant="" vendor="Renesas" version="6.2.0">
+      <description>I/O Port</description>
+      <originalPack>Renesas.RA.6.2.0.pack</originalPack>
+    </component>
+    <component apiversion="" class="CMSIS" condition="" group="Main" subgroup="CoreM" variant="" vendor="Arm" version="6.1.0+fsp.6.2.0">
+      <description>Arm CMSIS Version 6 - Core (M)</description>
+      <originalPack>Arm.CMSIS6.6.1.0+fsp.6.2.0.pack</originalPack>
+    </component>
     <component apiversion="" class="BSP" condition="" group="Board" subgroup="ra6m5_ek" variant="" vendor="Renesas" version="6.2.0">
       <description>RA6M5-EK Board Support Files</description>
       <originalPack>Renesas.RA_board_ra6m5_ek.6.2.0.pack</originalPack>
@@ -228,25 +240,13 @@
       <description>Board support package for RA6M5 - Linker</description>
       <originalPack>Renesas.RA_mcu_ra6m5.6.2.0.pack</originalPack>
     </component>
-    <component apiversion="" class="Common" condition="" group="all" subgroup="fsp_common" variant="" vendor="Renesas" version="6.2.0">
-      <description>Board Support Package Common Files</description>
-      <originalPack>Renesas.RA.6.2.0.pack</originalPack>
-    </component>
     <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_gpt" variant="" vendor="Renesas" version="6.2.0">
       <description>General PWM Timer</description>
-      <originalPack>Renesas.RA.6.2.0.pack</originalPack>
-    </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_ioport" variant="" vendor="Renesas" version="6.2.0">
-      <description>I/O Port</description>
       <originalPack>Renesas.RA.6.2.0.pack</originalPack>
     </component>
     <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_sci_uart" variant="" vendor="Renesas" version="6.2.0">
       <description>SCI UART</description>
       <originalPack>Renesas.RA.6.2.0.pack</originalPack>
-    </component>
-    <component apiversion="" class="CMSIS" condition="" group="Main" subgroup="CoreM" variant="" vendor="Arm" version="6.1.0+fsp.6.2.0">
-      <description>Arm CMSIS Version 6 - Core (M)</description>
-      <originalPack>Arm.CMSIS6.6.1.0+fsp.6.2.0.pack</originalPack>
     </component>
   </raComponentSelection>
   <raElcConfiguration/>
@@ -260,7 +260,7 @@
       <property id="module.driver.ioport.elc_trigger_ioport4" value="_disabled"/>
       <property id="module.driver.ioport.pincfg" value="g_bsp_pin_cfg"/>
     </module>
-    <module id="module.driver.uart_on_sci_uart.372795294">
+    <module id="module.driver.uart_on_sci_uart.32025936">
       <property id="module.driver.uart.name" value="g_uart0"/>
       <property id="module.driver.uart.channel" value="7"/>
       <property id="module.driver.uart.data_bits" value="module.driver.uart.data_bits.data_bits_8"/>
@@ -289,7 +289,7 @@
       <property id="module.driver.uart.tei_ipl" value="board.icu.common.irq.priority12"/>
       <property id="module.driver.uart.eri_ipl" value="board.icu.common.irq.priority12"/>
     </module>
-    <module id="module.driver.timer_on_gpt.4603723">
+    <module id="module.driver.timer_on_gpt.1932838017">
       <property id="module.driver.timer.name" value="g_timer0"/>
       <property id="module.driver.timer.channel" value="0"/>
       <property id="module.driver.timer.mode" value="module.driver.timer.mode.mode_periodic"/>
@@ -345,8 +345,8 @@
     </module>
     <context id="_hal.0">
       <stack module="module.driver.ioport_on_ioport.0"/>
-      <stack module="module.driver.uart_on_sci_uart.372795294"/>
-      <stack module="module.driver.timer_on_gpt.4603723"/>
+      <stack module="module.driver.uart_on_sci_uart.32025936"/>
+      <stack module="module.driver.timer_on_gpt.1932838017"/>
     </context>
     <config id="config.driver.sci_uart">
       <property id="config.driver.sci_uart.param_checking_enable" value="config.driver.sci_uart.param_checking_enable.bsp"/>

@@ -1,11 +1,11 @@
 #
 #  外部（SDK）ターゲットのパス解決規約（asp3_core PORTING_GUIDE「外部ターゲット」）：
-#   - 共通arch（arch/arm_m_gcc/common）は asp3_core サブモジュール側＝ASP3_ROOT_DIR
+#   - 共通arch（arch/arm_iar_iccarm/common）は asp3/arch/arm_iar_iccarm 側＝ASP3_ROOT_DIR
 #   - チップ依存部（ra6m5_fsp）・ターゲット依存部は本リポジトリ側＝CMAKE_CURRENT_LIST_DIR 相対
 #     （本ファイルは asp3_core の CMakeLists から ASP3_TARGET_DIR 経由で include されるため）
 #
-set(ARCHDIR ${ASP3_ROOT_DIR}/arch/arm_m_gcc)
-get_filename_component(CHIPDIR ${CMAKE_CURRENT_LIST_DIR}/../../arch/arm_m_gcc/ra6m5_fsp ABSOLUTE)
+get_filename_component(ARCHDIR ${CMAKE_CURRENT_LIST_DIR}/../../arch/arm_iar_iccarm ABSOLUTE)
+get_filename_component(CHIPDIR ${CMAKE_CURRENT_LIST_DIR}/../../arch/arm_iar_iccarm/ra6m5_fsp ABSOLUTE)
 set(TARGETDIR ${CMAKE_CURRENT_LIST_DIR})
 
 list(APPEND ASP3_CFG_FILES
@@ -67,9 +67,11 @@ list(APPEND ASP3_INCLUDE_DIRS    ${CMAKE_SOURCE_DIR})
 #  （fsp.lld / asp3_sections.lld）は不要。arch（--target/-mcpu：正しい multilib 選択用）と
 #  -nostartfiles（ATfE picolibc の crt0 回避）・-nostdlib のみ与え、既定レイアウトでリンクする。
 list(APPEND ASP3_LINK_OPTIONS
-    --target=arm-none-eabi -mcpu=cortex-m33 -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb
-    -nostartfiles -nostdlib)
-list(APPEND ASP3_LINK_LIBS c)
+#    --target=arm-none-eabi -mcpu=cortex-m33 -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb
+#    -nostartfiles -nostdlib
+    --no_remove 
+    )
+#list(APPEND ASP3_LINK_LIBS c)
 
 include(${CHIPDIR}/arch.cmake)
 

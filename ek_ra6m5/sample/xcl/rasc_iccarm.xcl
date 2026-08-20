@@ -1,0 +1,13 @@
+// generated extended command line file - do not edit
+-I"C:\tmp\Renesas\T1\asp3\ek_ra6m5\sample1"
+-I"C:\tmp\Renesas\T1\asp3\ek_ra6m5\sample1/src"
+-I"C:\tmp\Renesas\T1\asp3\ek_ra6m5\sample1/ra/fsp/inc"
+-I"C:\tmp\Renesas\T1\asp3\ek_ra6m5\sample1/ra/fsp/inc/instances"
+-I"C:\tmp\Renesas\T1\asp3\ek_ra6m5\sample1/ra_gen"
+-I"C:\tmp\Renesas\T1\asp3\ek_ra6m5\sample1/ra/fsp/inc/api"
+-I"C:\tmp\Renesas\T1\asp3\ek_ra6m5\sample1/ra_cfg/fsp_cfg/bsp"
+-I"C:\tmp\Renesas\T1\asp3\ek_ra6m5\sample1/ra_cfg/fsp_cfg"
+-I"C:\tmp\Renesas\T1\asp3\ek_ra6m5\sample1/ra/arm/CMSIS_6/CMSIS/Core/Include"
+-D_RENESAS_RA_
+-D_RA_ORDINAL=1
+-D_RA_CORE=CM33

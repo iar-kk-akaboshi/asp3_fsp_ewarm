@@ -15,7 +15,11 @@
  */
 #define target_hrt_get_current		_kernel_target_hrt_get_current
 
+#if defined(__GNUC__) || defined(__clang__)
 #define _kernel_exc_tbl             __Vectors
+#else
+#define _kernel_exc_tbl             __vector_table
+#endif
 #define _kernel_svc_handler         SVC_Handler
 #define _kernel_pendsv_handler      PendSV_Handler
 #define target_systick_handler      SysTick_Handler
